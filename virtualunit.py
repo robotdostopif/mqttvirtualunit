@@ -1,40 +1,35 @@
 import random
-
-
+import yaml
+import os
+import paho.mqtt.publish as publish
+import time
 class VirtualUnit:
-    Id = ""
+    recieverId = ""
+    mqttusername = "" 
+    mqttpassword = ""
     beaconId = ""
     rssi = 0
-    beaconIds = []
+    def __init__(self, recieverId, mqttusername, mqttpassword): 
+        self.recieverId = recieverId
+        self.mqttusername = mqttusername
+        self.mqttpassword = mqttpassword
+        self.beaconId = self.generateBeaconId()
+        self.rssi = self.generateRssi()
 
     def generateRssi(self):
-        rssi = random.randint(-80, -30)
-        print(rssi)
+        return random.randint(-80, -30)
 
-    # def generateId():
+    def generateBeaconId(self):
+        yaml_file = open("config/beacons.yaml")
+        parsed_yaml_file = yaml.load(yaml_file, Loader=yaml.FullLoader)
+        beaconIds = parsed_yaml_file.get("beaconids")
+        return random.choice(beaconIds)
+    def publish_message(self, message):
+        publish.single(self.mqttusername + "/feeds/virtualunit", message, hostname="io.adafruit.com", client_id=str(self.recieverId),
+                    auth={'username': self.mqttusername, 'password': self.mqttpassword})    
+        print(message)
 
-    # def generateBeaconId():
-
-    # def setInterval():
-
-    #
-
-#     VirtualUnit
-# const string Id;
-# int payloadId;
-# int rssi;
-# const List<string> payloadIds;
-
-# generaterssi()
-# generateid()
-# generatePayloadId()
-
-# setInterval(int seconds)
-# {
-# publishTimer(seconds)
-# timer.start()
-# while timer.value < seconds
-# generatePayloadId()
-# generaterssi()
-# client.Publish()
-# }
+    def start_unit(self):
+        time.sleep(random.randint(1,5))
+        payload = self.beaconId + " " + str(self.rssi)
+        self.publish_message(payload)
