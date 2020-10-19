@@ -1,8 +1,4 @@
 import random
-import paho.mqtt.publish as publish
-# from app_settings import AppSettings
-
-# config = AppSettings()
 
 
 class VirtualUnit:
@@ -21,8 +17,7 @@ class VirtualUnit:
 
     # def setInterval():
 
-    # publish.single(config.mqttbroker.mqttusername + "/feeds/virtualunit", "heyload", hostname="io.adafruit.com",
-    #                auth={'username': config.mqttbroker.mqttusername, 'password': config.mqttbroker.mqttpassword})
+    #
 
 #     VirtualUnit
 # const string Id;
