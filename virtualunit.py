@@ -1,21 +1,23 @@
 import random
 import yaml
 import os
-import paho.mqtt.publish as publish
 import time
+import paho.mqtt.publish as publish
 
 
 class VirtualUnit:
     recieverId = ""
     mqttusername = ""
     mqttpassword = ""
+    mqttfeedpath = ""
     beaconId = ""
     rssi = 0
 
-    def __init__(self, recieverId, mqttusername, mqttpassword):
+    def __init__(self, recieverId, mqttusername, mqttpassword, mqttfeedpath):
         self.recieverId = recieverId
         self.mqttusername = mqttusername
         self.mqttpassword = mqttpassword
+        self.mqttfeedpath = mqttfeedpath
         self.beaconId = self.generateBeaconId()
         self.rssi = self.generateRssi()
 
@@ -29,7 +31,7 @@ class VirtualUnit:
         return random.choice(beaconIds)
 
     def publish_message(self, message):
-        publish.single(self.mqttusername + "/feeds/test", message, hostname="io.adafruit.com", client_id=str(self.recieverId),
+        publish.single(self.mqttusername + "/feeds/" + self.mqttfeedpath, message, hostname="io.adafruit.com", client_id=str(self.recieverId),
                        auth={'username': self.mqttusername, 'password': self.mqttpassword})
         print(message)
 
