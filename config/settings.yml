@@ -1,3 +1,4 @@
 mqttbroker:
     mqttusername: ''
     mqttpassword: ''
+    mqttfeedpath: ''

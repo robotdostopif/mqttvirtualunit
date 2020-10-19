@@ -4,6 +4,7 @@ from app_settings import AppSettings
 config = AppSettings()
 mqttusername = config.mqttbroker.mqttusername
 mqttpassword = config.mqttbroker.mqttpassword
+mqttfeedpath = config.mqttbroker.mqttfeedpath
 print(mqttusername)
 print(mqttpassword)
 
@@ -11,7 +12,8 @@ print(mqttpassword)
 def start_units(amount):
     for i in range(amount):
         print(i)
-        virtualunit = VirtualUnit(amount+1, mqttusername, mqttpassword)
+        virtualunit = VirtualUnit(
+            amount+1, mqttusername, mqttpassword, mqttfeedpath)
         virtualunit.start_unit()
 
 
