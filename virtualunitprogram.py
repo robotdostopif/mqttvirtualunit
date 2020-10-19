@@ -11,4 +11,10 @@ def start_units(amount):
         print(i)
         virtualunit = VirtualUnit(amount+1,mqttusername,mqttpassword)
         virtualunit.start_unit()
-start_units(5)
+
+def main():
+    amount = input("Choose amount of Virtual Units to initlize: ") 
+    start_units(amount)
+    print("Press Ctrl + C to Exit the simulation.")
+
+main()
