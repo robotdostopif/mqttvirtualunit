@@ -2,3 +2,7 @@ mqttbroker:
     mqttusername: ''
     mqttpassword: ''
     mqttfeedpath: ''
+sqldatabase:
+    sqlserver: ''
+    sqldatabase: ''
+    sqldriver: ''

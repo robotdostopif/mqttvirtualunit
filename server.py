@@ -2,14 +2,30 @@ import anvil.server
 import socket
 import sys
 import time
+import pyodbc
+import json
+import datetime
+from app_settings import AppSettings
 
-anvil.server.connect("752NKST3E7GZVBM2DAQZIFGR-DE3O5TTLAKIYPG2B")
-
-total_received_data = []
+anvil.server.connect("JHNUAAIPIVCORMAII7AEP2IE-B5DR34S2FJJZIT3R")
+config = AppSettings()
+server = config.sqlconnection.sqlserver
+database = config.sqlconnection.sqldatabase
+driver = config.sqlconnection.sqldriver
+def myconverter(o):
+    if isinstance(o, datetime.datetime):
+        return o.__str__()
 
 @anvil.server.callable
 def get_event_data():
-    return total_received_data
+    data = []
+    dbCall = pyodbc.connect('Driver='+driver+'; SERVER='+server+'; DATABASE='+database+'; Trusted_Connection=True;')
+    cursor = dbCall.cursor()
+    cursor.execute('SELECT * FROM Events')
+    rows = cursor.fetchall()
+    for row in rows:
+        data.append(list(row))
+    return json.dumps(data, default = myconverter)
 
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
