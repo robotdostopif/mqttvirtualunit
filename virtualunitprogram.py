@@ -5,15 +5,12 @@ config = AppSettings()
 mqttusername = config.mqttbroker.mqttusername
 mqttpassword = config.mqttbroker.mqttpassword
 mqttfeedpath = config.mqttbroker.mqttfeedpath
-print(mqttusername)
-print(mqttpassword)
-
 
 def start_units(amount):
     for i in range(amount):
         print(i)
         virtualunit = VirtualUnit(
-            amount+1, mqttusername, mqttpassword, mqttfeedpath)
+            i+1, mqttusername, mqttpassword, mqttfeedpath)
         virtualunit.start_unit()
 
 

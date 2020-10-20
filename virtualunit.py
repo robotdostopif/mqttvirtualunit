@@ -3,7 +3,7 @@ import yaml
 import os
 import time
 import paho.mqtt.publish as publish
-
+import json
 
 class VirtualUnit:
     recieverId = ""
@@ -37,5 +37,8 @@ class VirtualUnit:
 
     def start_unit(self):
         time.sleep(random.randint(1, 5))
-        payload = self.beaconId + " " + str(self.rssi)
-        self.publish_message(payload)
+        payload = {"RecieverId": self.recieverId, 
+                   "BeaconId": self.beaconId,
+                   "Rssi": str(self.rssi)}
+        payload_json = json.dumps(payload)
+        self.publish_message(payload_json)
