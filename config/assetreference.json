@@ -1,0 +1,5 @@
+[{"description": "lars@example.com", "type": "person", "beaconId": "919b0fea-d3b1-4c57-8440-6afe91f8c806"},
+{"description": "computer_1", "type": "asset", "beaconId": "5adb6608-1171-4d8c-a3fc-50e2e645ea81"},
+{"description": "cecilia@example.com", "type": "person", "beaconId": "2b1eb603-f771-4958-9a2e-9a6d0ad03024"},
+{"description": "hammer_5", "type": "asset", "beaconId": "ee2b0aec-984b-486b-a2f1-5d829ab14e62"},
+{"description": "lisa@example.com", "type": "person", "beaconId": "84fc9fb9-7edf-4c6d-8b63-ddb18c2b9843"}]
