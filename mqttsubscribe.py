@@ -19,8 +19,8 @@ def subscribe_message():
     print(messagesObj)
     dbCall = pyodbc.connect('Driver='+driver+'; SERVER='+server+'; DATABASE='+database+'; Trusted_Connection=True;')
     cursor = dbCall.cursor()
-    sql = "INSERT INTO Events (AssetType, RecieverId, BeaconId, Rssi, Created) VALUES (?, ?, ?, ?, ?)"
-    val = ("person", messagesObj['RecieverId'], messagesObj['BeaconId'], messagesObj['Rssi'], datetime.datetime.now())
+    sql = "INSERT INTO Events (RecieverId, BeaconId, Rssi, Created) VALUES (?, ?, ?, ?)"
+    val = (messagesObj['RecieverId'], messagesObj['BeaconId'], messagesObj['Rssi'], datetime.datetime.now())
     cursor.execute(sql,val)
     dbCall.commit()
 

@@ -29,9 +29,11 @@ def get_event_data():
     with dbCall.cursor() as cur:
         cur.execute('SELECT * FROM Events')
         rows = cur.fetchall()
+        print(rows)
         for row in rows:
-            refData = get_reference_data(row[3])
-            data.append({'description':refData['description'],'id': row[0], 'type': row[1], 'recieverId' :row[2], 'beaconId' :row[3], 'rssi':row[4]})
+            refData = get_reference_data(row[2])
+            print(refData)
+            data.append({'description': refData['description'],'id': row[0], 'type': refData['type'], 'recieverId' :row[1], 'beaconId' :row[2], 'rssi':row[3],  'created': row[4]})
         return data
 
 # Create a TCP/IP socket
