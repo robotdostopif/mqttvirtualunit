@@ -1,6 +1,8 @@
-anvil-uplink
-app-settings
+anvil       
+anvil-app-server  
+anvil-uplink      
+app-settings    
 paho-mqtt
-pip
-pyodbc
-PyYAML       
+pipenv    
+pyodbc 
+PyYAML
