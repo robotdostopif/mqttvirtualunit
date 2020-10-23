@@ -1,38 +1,25 @@
-import paho.mqtt.subscribe as subscribe
 import datetime
 import pyodbc
 import json
+import paho.mqtt.client as paho
 from app_settings import AppSettings
 from database import DataBase
 
 config = AppSettings()
-mqttusername = config.mqttbroker.mqttusername
-mqttpassword = config.mqttbroker.mqttpassword
-mqttfeedpath = config.mqttbroker.mqttfeedpath
-server = config.sqlconnection.sqlserver
-database = config.sqlconnection.sqldatabase
-driver = config.sqlconnection.sqldriver
+def on_subscribe(client, userdata, mid, granted_qos):
+    print("Subscribed: "+str(mid)+" "+str(granted_qos))
 
-
-def subscribe_message():
-    messagesJson = subscribe.simple(mqttusername + "/feeds/" + mqttfeedpath,
-                                    hostname="io.adafruit.com",
-                                    auth={
-                                        'username': mqttusername,
-                                        'password': mqttpassword
-                                    })
-    messagesObj = json.loads(messagesJson.payload)
-    print(messagesObj)
+def on_message(client, userdata, msg):
+    messagesObj = json.loads(msg.payload)
     DataBase.write_to_db(messagesObj)
+    print(msg.topic+" "+str(msg.qos)+" "+str(msg.payload))    
 
+client = paho.Client()
+client.username_pw_set(config.mqttbroker.mqttusername, password=config.mqttbroker.mqttpassword)
+client.connect('io.adafruit.com', 1883)
+client.subscribe(config.mqttbroker.mqttusername + "/feeds/" + config.mqttbroker.mqttfeedpath, qos=1)
+client.on_subscribe = on_subscribe
+client.on_message = on_message
 
-def main():
-    try:
-        while True:
-            subscribe_message()
-            print("Press Ctrl + C to Exit to stop subscribe.")
-    except KeyboardInterrupt:
-        pass
+client.loop_forever()
 
-
-main()
