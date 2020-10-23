@@ -1,0 +1,6 @@
+anvil-uplink
+app-settings
+paho-mqtt
+pip
+pyodbc
+PyYAML       
