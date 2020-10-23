@@ -12,6 +12,7 @@ class VirtualUnit:
     mqttfeedpath = ""
     beaconId = ""
     rssi = 0
+    measuredpower = 0
 
     def __init__(self, recieverId, mqttusername, mqttpassword, mqttfeedpath):
         self.recieverId = recieverId
@@ -20,10 +21,14 @@ class VirtualUnit:
         self.mqttfeedpath = mqttfeedpath
         self.beaconId = self.generateBeaconId()
         self.rssi = self.generateRssi()
+        self.measuredpower = self.genrateMeasuredPower()
 
     def generateRssi(self):
         return random.randint(-80, -30)
 
+    def genrateMeasuredPower(self):
+        return random.randint(-65,4)
+    
     def generateBeaconId(self):
         yaml_file = open("config/beacons.yaml")
         parsed_yaml_file = yaml.load(yaml_file, Loader=yaml.FullLoader)
@@ -39,6 +44,7 @@ class VirtualUnit:
         time.sleep(random.randint(1, 5))
         payload = {"RecieverId": self.recieverId, 
                    "BeaconId": self.beaconId,
-                   "Rssi": str(self.rssi)}
+                   "Rssi": str(self.rssi),
+                   "MeasuredPower": str(self.measuredpower)}
         payload_json = json.dumps(payload)
         self.publish_message(payload_json)
