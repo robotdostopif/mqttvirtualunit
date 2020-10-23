@@ -39,12 +39,17 @@ while True:  # instead of anvil.server.run_forever()
         print('client connected:', client_address, file=sys.stderr)
         total_received_data = []
         while True:
-            data = connection.recv(16)
-            print('received "%s"' % data, file=sys.stderr)
-            if data:
-                total_received_data += data
-                connection.sendall(data)
-            else:
-                break
+            try:
+                data = connection.recv(16)
+                print('received "%s"' % data, file=sys.stderr)
+                if data:
+                    total_received_data += data
+                    connection.sendall(data)
+                else:
+                    break
+            except KeyboardInterrupt:
+                print("Stop me!")
+                sys.exit(0)
+
     finally:
         connection.close()
