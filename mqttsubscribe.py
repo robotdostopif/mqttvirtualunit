@@ -3,6 +3,7 @@ import datetime
 import pyodbc
 import json
 from app_settings import AppSettings
+from database import DataBase
 
 config = AppSettings()
 mqttusername = config.mqttbroker.mqttusername
@@ -12,17 +13,18 @@ server = config.sqlconnection.sqlserver
 database = config.sqlconnection.sqldatabase
 driver = config.sqlconnection.sqldriver
 
+
 def subscribe_message():
-    messagesJson = subscribe.simple(mqttusername + "/feeds/" + mqttfeedpath, hostname="io.adafruit.com",
-                       auth={'username': mqttusername, 'password': mqttpassword})
+    messagesJson = subscribe.simple(mqttusername + "/feeds/" + mqttfeedpath,
+                                    hostname="io.adafruit.com",
+                                    auth={
+                                        'username': mqttusername,
+                                        'password': mqttpassword
+                                    })
     messagesObj = json.loads(messagesJson.payload)
     print(messagesObj)
-    dbCall = pyodbc.connect('Driver='+driver+'; SERVER='+server+'; DATABASE='+database+'; Trusted_Connection=True;')
-    cursor = dbCall.cursor()
-    sql = "INSERT INTO Events (RecieverId, BeaconId, Rssi, Created) VALUES (?, ?, ?, ?)"
-    val = (messagesObj['RecieverId'], messagesObj['BeaconId'], messagesObj['Rssi'], datetime.datetime.now())
-    cursor.execute(sql,val)
-    dbCall.commit()
+    DataBase.write_to_db(messagesObj)
+
 
 def main():
     try:
@@ -31,5 +33,6 @@ def main():
             print("Press Ctrl + C to Exit to stop subscribe.")
     except KeyboardInterrupt:
         pass
+
 
 main()
