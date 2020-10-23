@@ -1,0 +1,8 @@
+anvil       
+anvil-app-server  
+anvil-uplink      
+app-settings    
+paho-mqtt
+pipenv    
+pyodbc 
+PyYAML
