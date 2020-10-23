@@ -11,6 +11,14 @@ driver = config.sqlconnection.sqldriver
 
 
 class DataBase:
+    def get_reference_data(beaconID):
+        file = open('config/assetreference.json')
+        data = json.load(file)
+        for d in data:
+            if d['beaconId'] == beaconID:
+                file.close()
+                return d
+
     def read_from_db():
         data = []
         dbCall = pyodbc.connect('Driver=' + driver + '; SERVER=' + server +
@@ -21,7 +29,7 @@ class DataBase:
             rows = cur.fetchall()
             print(rows)
             for row in rows:
-                refData = get_reference_data(row[2])
+                refData = DataBase.get_reference_data(row[2])
                 print(refData)
                 data.append({
                     'description': refData['description'],
@@ -32,7 +40,7 @@ class DataBase:
                     'rssi': row[3],
                     'created': row[4]
                 })
-        return data
+            return data
 
     def write_to_db(messagesObj):
         dbCall = pyodbc.connect('Driver=' + driver + '; SERVER=' + server +
@@ -44,11 +52,3 @@ class DataBase:
                messagesObj['Rssi'], datetime.datetime.now())
         cursor.execute(sql, val)
         dbCall.commit()
-
-    def get_reference_data(beaconID):
-        file = open('config/assetreference.json')
-        data = json.load(file)
-        for d in data:
-            if d['beaconId'] == beaconID:
-                file.close()
-                return d
