@@ -38,7 +38,8 @@ class DataBase:
                     'recieverId': row[1],
                     'beaconId': row[2],
                     'rssi': row[3],
-                    'created': row[4]
+                    'measuredpower': row[4],
+                    'created': row[5]
                 })
             return data
 
@@ -47,8 +48,8 @@ class DataBase:
                                 '; DATABASE=' + database +
                                 '; Trusted_Connection=True;')
         cursor = dbCall.cursor()
-        sql = "INSERT INTO Events (RecieverId, BeaconId, Rssi, Created) VALUES (?, ?, ?, ?)"
+        sql = "INSERT INTO Events (ReceiverId, BeaconId, Rssi, MeasuredPower, Created) VALUES (?, ?, ?, ?, ?)"
         val = (messagesObj['RecieverId'], messagesObj['BeaconId'],
-               messagesObj['Rssi'], datetime.datetime.now())
+               messagesObj['Rssi'],messagesObj['MeasuredPower'], datetime.datetime.now())
         cursor.execute(sql, val)
         dbCall.commit()
