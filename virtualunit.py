@@ -27,7 +27,7 @@ class VirtualUnit:
         return random.randint(-80, -30)
 
     def genrateMeasuredPower(self):
-        return random.randint(-65,4)
+        return random.randint(-80,-30)
     
     def generateBeaconId(self):
         yaml_file = open("config/beacons.yaml")
