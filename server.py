@@ -11,16 +11,16 @@ from database import DataBase
 
 config = AppSettings()
 anvil.server.connect(config.anvil.uplink)
-server = config.sqlconnection.sqlserver
-database = config.sqlconnection.sqldatabase
-driver = config.sqlconnection.sqldriver
 
 
 @anvil.server.callable
 def get_event_data():
     data = []
-    data = DataBase.read_from_db()
-    return data
+    try:
+        data = DataBase.read_from_db()
+        return data
+    except RuntimeError:
+        print("Failed to read from database!")
 
 
 # Create a TCP/IP socket
@@ -47,9 +47,8 @@ while True:  # instead of anvil.server.run_forever()
                     connection.sendall(data)
                 else:
                     break
-            except KeyboardInterrupt:
-                print("Stop me!")
-                sys.exit(0)
-
+            except RuntimeError:
+                print("Could not get data!")
+                break
     finally:
         connection.close()
