@@ -1,16 +1,21 @@
 from virtualunit import VirtualUnit
 from app_settings import AppSettings
+import logging
+
+logger = logging.getLogger("example_logger")
+logger.warning("This is a warning")
+
 
 config = AppSettings()
 mqttusername = config.mqttbroker.mqttusername
 mqttpassword = config.mqttbroker.mqttpassword
 mqttfeedpath = config.mqttbroker.mqttfeedpath
 
+
 def start_units(amount):
     for i in range(amount):
         print(i)
-        virtualunit = VirtualUnit(
-            i+1, mqttusername, mqttpassword, mqttfeedpath)
+        virtualunit = VirtualUnit(i + 1, mqttusername, mqttpassword, mqttfeedpath)
         virtualunit.start_unit()
 
 
