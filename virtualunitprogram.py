@@ -10,20 +10,17 @@ mqttfeedpath = config.mqttbroker.mqttfeedpath
 
 def start_units(amount):
     for i in range(amount):
-        print(i)
-        virtualunit = VirtualUnit(i + 1, mqttusername, mqttpassword, mqttfeedpath)
+        print(i + 1)
+        virtualunit = VirtualUnit(i + 1, mqttusername, mqttpassword,
+                                  mqttfeedpath)
         virtualunit.start_unit()
 
 
-def main():
-    try:
-        rawAmount = input("Choose amount of Virtual Units to initlize: ")
-        amount = int(rawAmount)
-        while True:
-            start_units(amount)
-            print("Press Ctrl + C to Exit the simulation.")
-    except KeyboardInterrupt:
-        pass
-
-
-main()
+try:
+    rawAmount = input("Choose amount of Virtual Units to initlize: ")
+    amount = int(rawAmount)
+    while True:
+        start_units(amount)
+        print("Press Ctrl + C to Exit the simulation.")
+except KeyboardInterrupt:
+    pass
