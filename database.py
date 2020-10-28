@@ -9,11 +9,10 @@ config = AppSettings()
 server = config.sqlconnection.sqlserver
 database = config.sqlconnection.sqldatabase
 driver = config.sqlconnection.sqldriver
+logger = log.get_logger("db")
 
 
 class DataBase:
-    logger = log.get_logger("db")
-
     def get_reference_data(beaconID):
         try:
             file = open("config/assetreference.json")
@@ -28,15 +27,9 @@ class DataBase:
     def read_from_db():
         try:
             data = []
-            dbCall = pyodbc.connect(
-                "Driver="
-                + driver
-                + "; SERVER="
-                + server
-                + "; DATABASE="
-                + database
-                + "; Trusted_Connection=True;"
-            )
+            dbCall = pyodbc.connect("Driver=" + driver + "; SERVER=" + server +
+                                    "; DATABASE=" + database +
+                                    "; Trusted_Connection=True;")
             with dbCall.cursor() as cur:
                 cur.execute("SELECT * FROM Events")
                 rows = cur.fetchall()
@@ -44,18 +37,16 @@ class DataBase:
                 for row in rows:
                     refData = DataBase.get_reference_data(row[2])
                     # print(refData)
-                    data.append(
-                        {
-                            "description": refData["description"],
-                            "id": row[0],
-                            "type": refData["type"],
-                            "recieverId": row[1],
-                            "beaconId": row[2],
-                            "rssi": row[3],
-                            "measuredpower": row[4],
-                            "created": row[5],
-                        }
-                    )
+                    data.append({
+                        "description": refData["description"],
+                        "id": row[0],
+                        "type": refData["type"],
+                        "recieverId": row[1],
+                        "beaconId": row[2],
+                        "rssi": row[3],
+                        "measuredpower": row[4],
+                        "created": row[5],
+                    })
                 return data
         except pyodbc.DatabaseError as err:
             logger.exception(err)
@@ -63,15 +54,9 @@ class DataBase:
 
     def write_to_db(messagesObj):
         try:
-            dbCall = pyodbc.connect(
-                "Driver="
-                + driver
-                + "; SERVER="
-                + server
-                + "; DATABASE="
-                + database
-                + "; Trusted_Connection=True;"
-            )
+            dbCall = pyodbc.connect("Driver=" + driver + "; SERVER=" + server +
+                                    "; DATABASE=" + database +
+                                    "; Trusted_Connection=True;")
             cursor = dbCall.cursor()
             sql = "INSERT INTO Events (ReceiverId, BeaconId, Rssi, MeasuredPower, Created) VALUES (?, ?, ?, ?, ?)"
             val = (
