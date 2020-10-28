@@ -10,7 +10,7 @@ mqttfeedpath = config.mqttbroker.mqttfeedpath
 
 def start_units(amount):
     for i in range(amount):
-        print(i)
+        print(i + 1)
         virtualunit = VirtualUnit(i + 1, mqttusername, mqttpassword,
                                   mqttfeedpath)
         virtualunit.start_unit()
